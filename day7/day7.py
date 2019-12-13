@@ -11,7 +11,7 @@ def maxAmplifiers(programStr):
     for phases in permutations(range(5), 5):
         inputs = [0]
         for i, p in enumerate(phases):
-            inputs += computer.run([p, inputs[i]])\
+            inputs += computer.runToHalt([p, inputs[i]])
 
         outputList.append(inputs[-1])
     return max(outputList)
@@ -23,26 +23,18 @@ def maxerAmplifiers(programStr):
     outputList = []
 
     for phases in permutations(range(5, 10), 5):
-        for c in computers:
-            c.updateProgram()
-        inputs = [0]
+        programs = [(c, c.run(inputs=[p])) for c, p in zip(computers, phases)]
 
-        firstRun = True
-        while not computers[0].halted:
-            for i, p in enumerate(phases):
-                thisInput = inputs[-1]
-                if firstRun:
-                    nextInput = computers[i].run(inputs=[p, thisInput], reset=False, returnOnOut=True)
-                else:
-                    nextInput = computers[i].run(inputs=[thisInput], reset=False, returnOnOut=True)
-
-                if nextInput is not None:
-                    inputs.append(nextInput)
-                else:
-                    break
-
-            firstRun = False
-        outputList.append(inputs[-1])
+        thisInput = 0
+        while True:
+            c, p = programs.pop(0)
+            c.inputs.append(thisInput)
+            nextInput = next(p, None)
+            if nextInput is None:
+                break
+            thisInput = nextInput
+            programs.append((c, p))
+        outputList.append(thisInput)
     return max(outputList)
 
 

@@ -1,11 +1,13 @@
 class Intcode(object):
 
+    program = []
+    idx = 0
+    halted = False
+    inputs = []
+
     def __init__(self, programStr):
         self.programStr = programStr
-        self.program = []
-        self.idx = 0
         self.updateProgram()
-        self.halted = False
 
     def updateProgram(self):
         self.program = program = [int(x) for x in self.programStr.split(',')]
@@ -28,10 +30,14 @@ class Intcode(object):
         return tuple(addrs)
 
 
-    def run(self, inputs=None, reset=True, returnOnOut=False):
-        if reset:
-            self.updateProgram()
-        outputs = []
+    def _requestInput(self):
+        if len(self.inputs) > 0:
+            return [self.inputs.pop(0)]
+        else:
+            yield
+
+
+    def _run(self):
         while self.program[self.idx] != 99:
 
             instruction = self.program[self.idx]
@@ -49,15 +55,16 @@ class Intcode(object):
                 self.idx += 4
             elif opcode == 3:
                 (addr1,) = self.getAddr(self.idx, 1)
-                self.program[addr1] = inputs.pop(0)
+                if len(self.inputs) > 0:
+                    self.program[addr1] = self.inputs.pop(0)
+                else:
+                    yield
                 self.idx += 2
             elif opcode == 4:
                 (addr1,) = self.getAddr(self.idx, 1)
                 self.idx += 2
-                if returnOnOut:
-                    return self.program[addr1]
-                else:
-                    outputs.append((self.program[addr1]))
+
+                yield self.program[addr1]
             elif opcode == 5:
                 (addr1, addr2) = self.getAddr(self.idx, 2)
                 if self.program[addr1] != 0:
@@ -83,8 +90,23 @@ class Intcode(object):
             else:
                 raise Exception()
         self.halted = True
-        if returnOnOut:
-            return
+        return
+
+    def runToHalt(self, inputs=None, reset=True):
+        if reset:
+            self.updateProgram()
+        self.inputs = inputs
+        return list(self._run())
+
+
+
+    def run(self, inputs=None, reset=True):
+        if reset:
+            self.updateProgram()
+        if inputs is None:
+            self.inputs = []
         else:
-            return outputs
+            self.inputs = inputs
+
+        return self._run()
 
