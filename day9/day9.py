@@ -6,3 +6,7 @@ if __name__ == "__main__":
     computer = Intcode(programStr)
     program = computer.runToHalt(inputs=[1])
     print(program)
+
+    computer = Intcode(programStr)
+    program = computer.runToHalt(inputs=[2])
+    print(program)
