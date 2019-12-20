@@ -27,6 +27,7 @@ class Intcode(object):
         self.program = infiniList([int(x) for x in self.programStr.split(',')])
         self.idx = 0
         self.halted = False
+        self.relBase = 0
 
     def getAddr(self, idx, nArgs):
         addrs = []
@@ -60,16 +61,13 @@ class Intcode(object):
 
             instruction = self.program[self.idx]
             opcode = instruction % 100
-            print(self.idx, self.relBase, self.program[self.idx:self.idx+4])
 
             if opcode == 1:
-                (addr1, addr2) = self.getAddr(self.idx, 2)
-                addr3 = self.program[self.idx+3]
+                (addr1, addr2, addr3) = self.getAddr(self.idx, 3)
                 self.program[addr3] = self.program[addr1] + self.program[addr2]
                 self.idx += 4
             elif opcode == 2:
-                (addr1, addr2) = self.getAddr(self.idx, 2)
-                addr3 = self.program[self.idx+3]
+                (addr1, addr2, addr3) = self.getAddr(self.idx, 3)
                 self.program[addr3] = self.program[addr1] * self.program[addr2]
                 self.idx += 4
             elif opcode == 3:
@@ -96,13 +94,11 @@ class Intcode(object):
                 else:
                     self.idx += 3
             elif opcode == 7:
-                (addr1, addr2) = self.getAddr(self.idx, 2)
-                addr3 = self.program[self.idx+3]
+                (addr1, addr2, addr3) = self.getAddr(self.idx, 3)
                 self.program[addr3] = int(self.program[addr1] < self.program[addr2])
                 self.idx += 4
             elif opcode == 8:
-                (addr1, addr2) = self.getAddr(self.idx, 2)
-                addr3 = self.program[self.idx+3]
+                (addr1, addr2, addr3) = self.getAddr(self.idx, 3)
                 self.program[addr3] = int(self.program[addr1] == self.program[addr2])
                 self.idx += 4
             elif opcode == 9:
