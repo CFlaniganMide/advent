@@ -15,7 +15,7 @@ def dist(a, b):
     return math.sqrt((a[0] - b[0])**2 + (a[1] - b[1])**2)
 
 
-class Node(object):
+class Node:
     def __init__(self, coords):
         self.x = coords[0]
         self.y = coords[1]
@@ -43,7 +43,7 @@ class Node(object):
     def __repr__(self):
         return "<Node: [%s, %s]>" % tuple(self.coords)
 
-class AstroGraph(object):
+class AstroGraph:
     def __init__(self, inputLines):
         self.width = len(inputLines[0])
         self.height = len(inputLines)

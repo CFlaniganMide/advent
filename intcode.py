@@ -11,7 +11,7 @@ class infiniList(list):
             self += [0]*(1 + key - len(self))
         super().__setitem__(key, value)
 
-class Intcode(object):
+class Intcode:
 
     program = []
     idx = 0

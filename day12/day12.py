@@ -87,7 +87,7 @@ def compiledSim(simArray):
     return np.lcm.reduce(idxs, dtype=np.int64)
 
 
-class Body(object):
+class Body:
     def __init__(self, position, velocity=None):
         self.position = np.array(position, dtype=np.int64)
 
@@ -120,7 +120,7 @@ class Body(object):
         return self.potential*self.kinetic
 
 
-class Simulation(object):
+class Simulation:
     def __init__(self, bodies):
         self.bodies = bodies
         self.time = 0

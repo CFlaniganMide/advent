@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from intcode import Intcode
 
 
-class Robot(object):
+class Robot:
     def __init__(self, programStr):
         self.computer = Intcode(programStr)
         self.program = self.computer.run()

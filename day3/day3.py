@@ -3,7 +3,7 @@ import itertools
 def manhattan(p1, p2):
     return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
 
-class Line(object):
+class Line:
     def __init__(self, coords, length):
         self.start = coords[0:2]
         self.end = coords[2:4]
@@ -41,7 +41,7 @@ class VertLine(Line):
     def __repr__(self):
         return "<VertLine: (%d, %d), (%d, %d)>" % (self.start[0], self.start[1], self.end[0], self.end[1])
 
-class Wire(object):
+class Wire:
 
     def __init__(self, lineStr):
         self.path = lineStr

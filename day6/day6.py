@@ -1,5 +1,5 @@
 
-class Body(object):
+class Body:
     def __init__(self, id):
         self.id = id
         self.children = []

@@ -6,7 +6,7 @@ import numpy as np
 from intcode import Intcode
 
 
-class Cabinet(object):
+class Cabinet:
 
     def __init__(self, programStr):
         self.programStr = programStr
