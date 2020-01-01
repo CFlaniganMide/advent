@@ -76,7 +76,10 @@ class Intcode:
                     self.program[addr1] = self.inputs.pop(0)
                     self.idx += 2
                 else:
-                    yield
+                    inVal = yield
+                    if inVal is not None:
+                        self.program[addr1] = inVal
+                        self.idx += 2
             elif opcode == 4:
                 (addr1,) = self.getAddr(self.idx, 1)
                 self.idx += 2
